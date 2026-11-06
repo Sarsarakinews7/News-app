@@ -1,10 +1,10 @@
 {
- "updated": "2026-11-06T20:39:13.645456+00:00",
+ "updated": "2026-11-06T20:41:23.303206+00:00",
  "world": [
   {
-   "title_en": "New wave of bomb threats hit European airlines",
-   "title_ur": "New wave of bomb threats hit European airlines",
-   "report_ur": "",
+   "title_en": "Bomb Threats Target European Airlines and Newsrooms",
+   "title_ur": "یورپی ایئر لائنز اور نشریاتی اداروں کو بم کی دھمکیاں",
+   "report_ur": "یورپی ممالک میں پروازوں کے بعد اب خبر رساں اداروں کو بھی بم کی دھمکیوں کا سامنا کرنا پڑا ہے۔ آئرلینڈ اور بلغاریہ کے نشریاتی اداروں کو جمعہ کے روز ای میلز موصول ہوئیں جن میں دعویٰ کیا گیا کہ یہ کارروائی مغرب کے لیے پیغام ہے۔\n\nبلغاریہ کے نووا ٹی وی اور آئرش نشریاتی ادارے آر ٹی ای کو ملنے والی ان دھمکیوں میں مائخیل اندروبوف نامی شخص نے ذمہ داری قبول کی۔ ان دھمکیوں کی وجہ سے آئرش نشریاتی ادارے کو اپنے دفاتر خالی کرنا پڑے اور نشریات بھی معطل کرنا پڑیں۔\n\nحالیہ اطلاعات کے مطابق ایئر لائنز کو ملنے والی دھمکیوں اور میڈیا ہاؤسز کو ملنے والے پیغامات کے درمیان اب تک کوئی باضابطہ تعلق سامنے نہیں آ سکا۔ یہ تازہ ترین واقعات پورے یورپ میں سفر اور میڈیا کے شعبے میں گہری تشویش کا باعث بنے ہیں۔",
    "sources": [
     {
      "name": "Google News",
@@ -25,9 +25,47 @@
    ]
   },
   {
-   "title_en": "ANC faces bruising defeat in South African local elections with 80% of ballots counted",
-   "title_ur": "ANC faces bruising defeat in South African local elections with 80% of ballots counted",
-   "report_ur": "",
+   "title_en": "Kenyan Cult Leader Sentenced to 200 Years for Starvation Murders",
+   "title_ur": "کینیا کے فرقے کے رہنما کو بچوں کی بھوک سے ہلاکت پر 200 سال قید",
+   "report_ur": "کینیا میں ایک ہولناک مقدمے کے دوران خود ساختہ قیامت خیز فرقے کے رہنما پال میکنزی کو 200 سال قید کی سزا سنا دی گئی ہے۔ عدالت نے یہ فیصلہ بچوں اور ایک بالغ سمیت 191 افراد کی بھوک سے ہلاکت کے جرم میں صادر کیا۔\n\nمجرم نے اپنے پیروکاروں کو جنگل میں بچوں کو جان بوجھ کر بھوکا رکھ کر ہلاک کرنے کا حکم دیا تھا تاکہ وہ مبینہ طور پر حضرت عیسیٰ سے ملاقات کر سکیں۔ یہ انسانی تاریخ کے بدترین فرقہ وارانہ سانحات میں سے ایک سمجھا جاتا ہے۔\n\nدوسری جانب ہانگ کانگ میں جمہوریت نواز سرگرم کارکن جوشوا وانگ کو بھی قومی سلامتی کے ایک مقدمے میں دس سال قید کی سزا سنائی گئی ہے۔ وانگ نے اس معاملے میں غیر ملکی ملی بھگت کے الزامات کا اعتراف کیا تھا۔",
+   "sources": [
+    {
+     "name": "Google News",
+     "link": "https://news.google.com/rss/articles/CBMivAFBVV95cUxPOVFQN3ZZdXgwV0VlOWE3MF8zbXg0ZF9ZenNaZ3pVTl8xcHpuREFHUFpodWFmMXVzSmN3c29kRVViMDZhdkZ1QjB1WGdoR0tLZ09OaTRORzBOWmNQQUFUb2RvMnpVdjQ3eGlCcmJsSGxPNzFVM0N2bEJCZ3V5SVJ0OTRyZW9LbFVhVmRXeUV2a0Q0eFE4WVR1Vl81V1NoTWZ4THNYbklpbFc1RmxIZ043WTBVWWxwTW4yVmNYXw?oc=5"
+    },
+    {
+     "name": "BBC",
+     "link": "https://www.bbc.co.uk/news/articles/cm5yne5984l0o?at_medium=RSS&at_campaign=rss"
+    },
+    {
+     "name": "The Guardian",
+     "link": "https://www.theguardian.com/world/2026/nov/06/kenyan-doomsday-sect-leader-jailed-murders-paul-mackenzie"
+    }
+   ]
+  },
+  {
+   "title_en": "Paraguay President Resigns Following Bank Collapse and Impeachment Move",
+   "title_ur": "بینک کے بیٹھ جانے اور مواخذے کی کارروائی کے بعد پیراگوئے کے صدر مستعفی",
+   "report_ur": "پیراگوئے میں بینک کے انہدام اور سیاسی بحران کے بعد صدر سانتیاگو پینا نے اپنے عہدے سے استعفیٰ دے دیا ہے۔ یہ پیش رفت ایک اہم مالیاتی ادارے کے خاتمے اور کانگریس کے ایوان زیریں کی جانب سے مواخذے کی کارروائی کے آغاز کے بعد سامنے آئی۔\n\nصدر سانتیاگو پینا کو اس سے قبل ملک میں پیش آنے والے حالیہ بینکنگ بحران اور منہدم ہونے والے بینک کی بنیادی کمپنی کے ساتھ مبینہ تعلقات کی وجہ سے شدید تنقید کا سامنا کرنا پڑ رہا تھا۔\n\nبینک کے بیٹھ جانے اور عوامی سطح پر بڑھتے ہوئے دباؤ کے بعد پیدا ہونے والی صورتحال نے ملک کی سیاسی فضا کو انتہائی کشیدہ کر دیا تھا۔ صدر کے استعفیٰ کو اسی تسلسل میں ایک بڑا سیاسی موڑ قرار دیا جا رہا ہے۔",
+   "sources": [
+    {
+     "name": "Google News",
+     "link": "https://news.google.com/rss/articles/CBMizAFBVV95cUxPaDFVTWxqNmxoN1JVVzVfSVdkQ1hSOXFmbkxBUnk3Y3FFaFZMZ3RFU1R1eUFiZTlUWG5Vdk9NU2NrRF9LSHVlaklHTUlpS2ZWMXRuNnRBb0JacVkxTEhpdmVTRlRKSDlQUWpZU3ZwVjVES2VCZU9WbGVWdXZRNVlRaGZadUYtTXRBVzZrbWhLQUFDb1oxTlF0MEpBRFlubEhVNmJvcnNLRW1zdEhqdmEwc3FTbGpJMXVHSGNYRmRfUkpiWFhGa3NHUnVxeG0?oc=5"
+    },
+    {
+     "name": "BBC",
+     "link": "https://www.bbc.co.uk/news/articles/c6p9g39vln3yo?at_medium=RSS&at_campaign=rss"
+    },
+    {
+     "name": "Al Jazeera",
+     "link": "https://www.aljazeera.com/news/2026/11/6/how-paraguays-ueno-collapse-is-only-its-latest-banking-crisis?traffic_source=rss"
+    }
+   ]
+  },
+  {
+   "title_en": "ANC Faces Major Defeat in South African Local Elections",
+   "title_ur": "جنوبی افریقہ کے بلدیاتی انتخابات میں اے این سی کو بڑی شکست کا سامنا",
+   "report_ur": "جنوبی افریقہ کے بلدیاتی انتخابات کے نتائج میں سابقہ حکمران جماعت افریقن نیشنل کانگریس (اے این سی) کو تاریخی شکست کا سامنا ہے۔ اسی فیصد سے زائد ووٹوں کی گنتی کے بعد نیلسن منڈیلا کی اس جماعت کا قومی سطح پر ووٹ شیئر کم ہو کر ایک تہائی سے بھی نیچے آ گیا ہے۔\n\nانتخابات میں اس بھاری پسپائی کی بڑی وجہ شہریوں کی وہ شدید ناراضگی ہے جو پانی کی بندش، بجلی کی کٹوتی اور تباہ حال بنیادی ڈھانچے کی وجہ سے پیدا ہوئی۔ ووٹرز نے ملک کی موجودہ ابتر خدمات اور انتظامی کارکردگی پر کھل کر اپنا غصہ ظاہر کیا۔\n\nسابقہ آزادی کی تحریک سے جڑی یہ جماعت گزشتہ کئی دہائیوں سے سیاسی منظر نامے پر غلبہ رکھتی تھی، لیکن حالیہ انتخابی نتائج نے اس کے زوال کو مزید نمایاں کر دیا ہے۔",
    "sources": [
     {
      "name": "Google News",
@@ -40,9 +78,9 @@
    ]
   },
   {
-   "title_en": "Poised for breakout moment in Latin America, Pope Leo also faces test of health",
-   "title_ur": "Poised for breakout moment in Latin America, Pope Leo also faces test of health",
-   "report_ur": "",
+   "title_en": "Pope Leo Begins Latin American Tour Amid Health Recovery",
+   "title_ur": "صحت کے چیلنجز کے باوجود پوپ لیو کا دورہ لاطینی امریکہ شروع",
+   "report_ur": "پوپ لیو نے پھیپھڑوں کی سرجری کے چند ہفتے بعد ہی لاطینی امریکہ کا طویل دورہ شروع کر دیا ہے۔ گزشتہ ماہ ان کے پھیپھڑے کا کچھ حصہ نکال دیا گیا تھا جس کے بعد ان کی صحت کے حوالے سے بھی سوالات اٹھائے جا رہے تھے۔\n\nاپنے اس دورے کے دوران پوپ لیو یوراگوئے، ارجنٹائن اور پیرو کا دورہ کریں گے۔ لاطینی امریکہ میں ان کا یہ سفر خطے میں ان کی آمد کے حوالے سے ایک اہم سنگ میل مانا جا رہا ہے۔\n\nاگرچہ وہ صحت کے بڑے چیلنجز سے نبرد آزما ہیں، تاہم اس طویل دورے کو ان کی روحانی اور مذہبی مصروفیت کا ایک اہم حصہ قرار دیا جا رہا ہے جہاں وہ متعدد پروگراموں میں شرکت کریں گے۔",
    "sources": [
     {
      "name": "Google News",
@@ -51,36 +89,6 @@
     {
      "name": "BBC",
      "link": "https://www.bbc.co.uk/news/articles/cqn06j0y61k6o?at_medium=RSS&at_campaign=rss"
-    }
-   ]
-  },
-  {
-   "title_en": "Protesters break into Microsoft data center site in Amsterdam as Europe’s backlash spreads",
-   "title_ur": "Protesters break into Microsoft data center site in Amsterdam as Europe’s backlash spreads",
-   "report_ur": "",
-   "sources": [
-    {
-     "name": "Google News",
-     "link": "https://news.google.com/rss/articles/CBMipgFBVV95cUxNMWg1SzZHQUk0WHZnZEZhLXhJaVVsaWFCR0ZEMklGeC1YZmE4UVZWRGs2aXBxNVhYeVBBMFlhU2pRZ0VKRjcyOVVFYzdnTTAyV0dCUWxlamwtU0VDZGI1UkJvbFVwZ3JiM1Bpb2REVENuTzRNSHZweDNIUXVadVR4TnNORjlQWU41ekYzNnlUdTZ0am1QaDlwSGZmUFVlYjY5Z2JtaTlR?oc=5"
-    },
-    {
-     "name": "Dawn",
-     "link": "https://www.dawn.com/news/2042640/activists-breach-microsoft-data-centre-construction-site-as-protests-spread-in-europe"
-    }
-   ]
-  },
-  {
-   "title_en": "Kenya Cult Leader Handed 200 Year Prison Sentence for Mass Murder",
-   "title_ur": "Kenya Cult Leader Handed 200 Year Prison Sentence for Mass Murder",
-   "report_ur": "",
-   "sources": [
-    {
-     "name": "Google News",
-     "link": "https://news.google.com/rss/articles/CBMiswFBVV95cUxNdDRkRnVqSmpvX29NbGg2NGJ1Sll3a296ejBSNE43Q1BpXzVPWFVhX2FOXzlyV1M4dGQ4Mm94aE5hUm1hLUhpYkpzbnd2YXJqWE5wcHFONUhPX3hwLWJHeUNMNXg2ZWx3dk91ZEVIUmswU0N3VTQ0U21kallKQlB1TDFMZzBCbWtmX2ZiWDdzRmF5eEM3T2pZdVJOZFRMb044U2N6Ml9lR2RadFFreWxjeElVMA?oc=5"
-    },
-    {
-     "name": "BBC",
-     "link": "https://www.bbc.co.uk/news/articles/cm5yne5984l0o?at_medium=RSS&at_campaign=rss"
     }
    ]
   }
