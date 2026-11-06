@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آج کی بڑی خبریں</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f6f3;--card:#fff;--text:#1d1d1b;--muted:#6b6b66;--accent:#0b6b4f;--line:#e4e4de}
+@media (prefers-color-scheme:dark){:root{--bg:#141413;--card:#1e1e1c;--text:#ecece8;--muted:#9a9a93;--accent:#4cc9a0;--line:#2e2e2b}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Noto Naskh Arabic",serif;line-height:2}
+header{padding:20px 16px 8px;max-width:720px;margin:auto}
+h1{margin:0;font-size:26px}
+.updated{color:var(--muted);font-size:14px}
+main{max-width:720px;margin:auto;padding:8px 16px 40px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin:14px 0}
+.num{color:var(--accent);font-weight:700}
+.card h2{margin:0 0 4px;font-size:21px;line-height:1.7}
+.en{direction:ltr;text-align:left;color:var(--muted);font-family:system-ui,sans-serif;font-size:13px;line-height:1.5;margin-bottom:8px}
+.card p{margin:8px 0;font-size:17px}
+.src{margin-top:10px;font-size:14px;color:var(--muted)}
+.src a{color:var(--accent);margin-inline-end:12px;text-decoration:none}
+</style>
+</head>
+<body>
+<header>
+<h1>آج کی 5 بڑی خبریں</h1>
+<div class="updated" id="up"></div>
+</header>
+<main id="list">لوڈ ہو رہا ہے...</main>
+<script>
+const box = document.getElementById("list"), up = document.getElementById("up");
+fetch("news.json?" + Date.now()).then(r => r.json()).then(d => {
+  box.textContent = "";
+  up.textContent = "آخری اپ ڈیٹ: " + new Date(d.updated).toLocaleString("ur-PK");
+  d.world.forEach((s, i) => {
+    const c = document.createElement("article");
+    c.className = "card";
+    const h = document.createElement("h2");
+    const n = document.createElement("span");
+    n.className = "num";
+    n.textContent = (i + 1) + ". ";
+    h.append(n, s.title_ur);
+    c.append(h);
+    const e = document.createElement("div");
+    e.className = "en";
+    e.textContent = s.title_en;
+    c.append(e);
+    (s.report_ur || "").split(/\n+/).filter(Boolean).forEach(t => {
+      const p = document.createElement("p");
+      p.textContent = t;
+      c.append(p);
+    });
+    const src = document.createElement("div");
+    src.className = "src";
+    src.append("ذرائع: ");
+    s.sources.forEach(x => {
+      if (!x.link.startsWith("http")) return;
+      const a = document.createElement("a");
+      a.href = x.link;
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.textContent = x.name;
+      src.append(a);
+    });
+    c.append(src);
+    box.append(c);
+  });
+}).catch(() => {
+  box.textContent = "ابھی خبریں دستیاب نہیں۔ تھوڑی دیر بعد دوبارہ کھولیں۔";
+});
+</script>
+</body>
+  </html>
