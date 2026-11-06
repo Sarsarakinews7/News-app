@@ -9,7 +9,7 @@ FEEDS = {
     "Dawn": "https://www.dawn.com/feeds/home",
     "The Guardian": "https://www.theguardian.com/world/rss",
 }
-MODEL = "gemini-flash-latest"
+MODELS = ["gemini-flash-lite-latest", "gemini-flash-latest"]
 KEY = os.environ.get("GEMINI_API_KEY", "")
 STOP = set("the and for with from this that its after over into about says say new his her their will has have had not but more than amid".split())
 
@@ -64,27 +64,36 @@ def cluster(items):
     return clusters
 
 
-def ask_gemini(c):
-    material = "\n".join(f"- [{i['source']}] {i['title']}. {i['desc']}" for i in c["items"][:8])
+def ask_gemini(top):
+    parts = []
+    for n, c in enumerate(top, 1):
+        material = "\n".join(f"- [{i['source']}] {i['title']}. {i['desc']}" for i in c["items"][:6])
+        parts.append(f"STORY {n}:\n{material}")
     prompt = (
-        "You are a news editor. Based ONLY on the material below about one news story, write: "
-        "an Urdu headline, an Urdu news report of 3 short paragraphs in your own original words "
-        "(do not copy sentences), and an English headline. Do not add facts that are not in the material. "
-        'Return JSON only: {"title_en": "...", "title_ur": "...", "report_ur": "..."}\n\nMATERIAL:\n' + material
+        "You are a news editor. For each numbered story below, based ONLY on its material, write: "
+        "an English headline, an Urdu headline, and an Urdu news report of 3 short paragraphs "
+        "in your own original words (do not copy sentences). Do not add facts that are not in the material. "
+        'Return JSON only, an array in the same order: [{"title_en": "...", "title_ur": "...", "report_ur": "..."}]\n\n'
+        + "\n\n".join(parts)
     )
     body = json.dumps({"contents": [{"parts": [{"text": prompt}]}],
                        "generationConfig": {"responseMimeType": "application/json"}}).encode()
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/{MODEL}:generateContent"
-    for attempt in range(3):
-        try:
-            req = urllib.request.Request(url, data=body, headers={
-                "Content-Type": "application/json", "x-goog-api-key": KEY})
-            with urllib.request.urlopen(req, timeout=90) as r:
-                data = json.loads(r.read())
-            return json.loads(data["candidates"][0]["content"]["parts"][0]["text"])
-        except Exception as e:
-            print("gemini error", attempt, e)
-            time.sleep(15)
+    waits = [20, 40, 60]
+    for rnd in range(3):
+        for model in MODELS:
+            url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+            try:
+                req = urllib.request.Request(url, data=body, headers={
+                    "Content-Type": "application/json", "x-goog-api-key": KEY})
+                with urllib.request.urlopen(req, timeout=120) as r:
+                    data = json.loads(r.read())
+                res = json.loads(data["candidates"][0]["content"]["parts"][0]["text"])
+                if isinstance(res, list) and res:
+                    print("gemini ok:", model)
+                    return res
+            except Exception as e:
+                print("gemini error", model, rnd, e)
+        time.sleep(waits[rnd])
     return None
 
 
@@ -93,10 +102,11 @@ def main():
     top = cluster(items)[:5]
     if not top:
         raise SystemExit("no news found")
+    res = ask_gemini(top) or []
     stories = []
-    for c in top:
+    for n, c in enumerate(top):
         first = c["items"][0]
-        res = ask_gemini(c) or {}
+        r = res[n] if n < len(res) and isinstance(res[n], dict) else {}
         sources = []
         seen = set()
         for i in c["items"]:
@@ -104,12 +114,11 @@ def main():
                 seen.add(i["source"])
                 sources.append({"name": i["source"], "link": i["link"]})
         stories.append({
-            "title_en": res.get("title_en") or first["title"],
-            "title_ur": res.get("title_ur") or first["title"],
-            "report_ur": res.get("report_ur") or first["desc"],
+            "title_en": r.get("title_en") or first["title"],
+            "title_ur": r.get("title_ur") or first["title"],
+            "report_ur": r.get("report_ur") or first["desc"],
             "sources": sources,
         })
-        time.sleep(5)
     os.makedirs("docs", exist_ok=True)
     out = {"updated": datetime.now(timezone.utc).isoformat(), "world": stories}
     with open("docs/news.json", "w", encoding="utf-8") as f:
