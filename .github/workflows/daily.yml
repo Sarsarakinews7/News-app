@@ -16,7 +16,7 @@ jobs:
       - name: Fetch news
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        run: python fetch_news.py
+        run: python -u fetch_news.py
       - name: Save results
         run: |
           git config user.name "news-bot"
