@@ -49,3 +49,36 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid color
 @media(max-width:650px){.topbar{height:66px;padding-inline:14px}.wrap{padding:18px 14px}.hero{border-radius:22px;padding:25px 19px}.news-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:22px}.tab-btn{padding:11px 7px;font-size:12px}.news-card{padding:17px;border-radius:17px}.section-head h2{font-size:21px}.card-bottom{align-items:flex-start}.read{white-space:nowrap}.detail-dialog{padding:17px}}
 @media(hover:none){.news-card:hover,.tab-btn:hover,.icon-btn:hover,.filter-btn:hover{transform:none;box-shadow:var(--shadow)}}
 @media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+
+/* Newsift UI v4: enforce loaded typefaces and visible, consistent motion */
+:root{font-synthesis:none;text-rendering:optimizeLegibility}
+html{scroll-behavior:smooth}
+body,button,input,select,textarea{font-family:"Noto Sans Arabic","Inter",system-ui,sans-serif}
+body{font-weight:400}
+.brand small,.tab-btn,.search input,.archive-bar label,.section-head,.tag,.sources,.read,.status,footer{font-family:"Noto Sans Arabic","Inter",system-ui,sans-serif}
+button,.tab-btn,.icon-btn,.save,.read,.search,.archive-bar,.news-card,.detail-dialog{will-change:transform}
+.topbar{transition:background .3s ease,box-shadow .3s ease}
+.toolbar,.news-tabs,.section-head{animation:uiSlideDown .55s cubic-bezier(.2,.8,.2,1) both}
+.toolbar{animation-delay:.06s}
+.news-tabs{animation-delay:.12s}
+.section-head{animation-delay:.16s}
+.news-grid{animation:uiSlideUp .42s cubic-bezier(.2,.8,.2,1) both}
+.news-card{animation:uiSlideUp .5s cubic-bezier(.2,.8,.2,1) both}
+.news-card:nth-child(1){animation-delay:.02s}
+.news-card:nth-child(2){animation-delay:.07s}
+.news-card:nth-child(3){animation-delay:.12s}
+.news-card:nth-child(4){animation-delay:.17s}
+.news-card:nth-child(5){animation-delay:.22s}
+.news-card:nth-child(6){animation-delay:.27s}
+.tab-btn{transition:transform .28s ease,background .28s ease,color .28s ease,box-shadow .28s ease,border-color .28s ease}
+.tab-btn.active{animation:tabPop .28s ease both}
+.archive-bar:not([hidden]){animation:uiSlideDown .32s ease both}
+.save{transition:transform .25s ease,color .25s ease,background .25s ease}
+.save:active{transform:scale(.88)}
+.detail-dialog[open]{animation:dialogRise .32s cubic-bezier(.2,.8,.2,1) both}
+@keyframes uiSlideUp{from{opacity:0;transform:translate3d(0,22px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes uiSlideDown{from{opacity:0;transform:translate3d(0,-14px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes tabPop{from{transform:translateY(3px) scale(.97)}to{transform:translateY(-2px) scale(1)}}
+@keyframes dialogRise{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important;will-change:auto!important}}
