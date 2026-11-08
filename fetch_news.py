@@ -20,7 +20,7 @@ def get(url):
 
 def clean(t):
     t = html.unescape(re.sub(r"<[^>]+>", " ", t or ""))
-    return re.sub(r"\\s+", " ", t).strip()
+    return re.sub(r"\s+", " ", t).strip()
 
 def kw(title):
     return {w for w in re.findall(r"[a-z0-9]+", title.lower()) if len(w) > 3 and w not in STOP}
@@ -34,7 +34,7 @@ def load_items():
         for it in list(root.iter("item"))[:50]:
             title=clean(it.findtext("title")); desc=clean(it.findtext("description"))
             if name=="Google News":
-                title=re.sub(r"\\s+-\\s+[^-]+$","",title); desc=""
+                title=re.sub(r"\s+-\s+[^-]+$","",title); desc=""
             if not title: continue
             rawdate=it.findtext("pubDate") or ""
             try: published=parsedate_to_datetime(rawdate).astimezone(timezone.utc).isoformat()
@@ -58,9 +58,9 @@ def cluster(items):
 def ask_gemini(top):
     parts=[]
     for n,c in enumerate(top,1):
-        material="\\n".join(f"- [{i['source']}] {i['title']}. {i['desc']}" for i in c["items"][:6])
-        parts.append(f"STORY {n}:\\n{material}")
-    prompt=("You are a news editor. For each numbered story below, based ONLY on its material, write an English headline, an Urdu headline, and an Urdu news report of 3 short paragraphs in original words. Do not add facts. Return JSON only, array same order: [{\\"title_en\\": \\"...\\", \\"title_ur\\": \\"...\\", \\"report_ur\\": \\"...\\"}]\\n\\n"+"\\n\\n".join(parts))
+        material="\n".join(f"- [{i['source']}] {i['title']}. {i['desc']}" for i in c["items"][:6])
+        parts.append(f"STORY {n}:\n{material}")
+    prompt=("You are a news editor. For each numbered story below, based ONLY on its material, write an English headline, an Urdu headline, and an Urdu news report of 3 short paragraphs in original words. Do not add facts. Return JSON only, array same order: [{\"title_en\": \"...\", \"title_ur\": \"...\", \"report_ur\": \"...\"}]\n\n"+"\n\n".join(parts))
     body=json.dumps({"contents":[{"parts":[{"text":prompt}]}],"generationConfig":{"responseMimeType":"application/json"}}).encode()
     for rnd,wait in enumerate([20,40,60]):
         for model in MODELS:
