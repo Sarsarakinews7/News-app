@@ -3,6 +3,8 @@ import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from email.utils import parsedate_to_datetime
 
+TOP_N = 10  # number of important stories
+
 FEEDS = {
     "Google News": "https://news.google.com/rss/headlines/section/topic/WORLD?hl=en&gl=US&ceid=US:en",
     "BBC": "http://feeds.bbci.co.uk/news/world/rss.xml",
@@ -78,7 +80,7 @@ def main():
     raw=load_items()
     if not raw: raise SystemExit("no news found")
     grouped=cluster(raw)
-    top=grouped[:5]
+    top=grouped[:TOP_N]
     res=ask_gemini(top) or []
     important=[]
     for n,c in enumerate(top):
