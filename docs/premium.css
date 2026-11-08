@@ -1,0 +1,47 @@
+/* Newsift premium layer (phase 1): palette, Urdu typography, cinematic intro, settings */
+:root{--bg:#f6f4ee;--surface:#fff;--ink:#14181f;--muted:#5d6675;--line:#e6e1d4;--brand:#8a5d0c;--brand2:#fbf0d8;--on-brand:#fff;--accent:#2f5fd0;--ts:1;--ur-head:"Noto Nastaliq Urdu","Noto Naskh Arabic","Noto Sans Arabic",serif;--ur-body:"Noto Naskh Arabic","Noto Sans Arabic",system-ui,sans-serif}
+body.dark{--bg:#080B12;--surface:#111827;--ink:#F5F6FA;--muted:#9AA4B2;--line:#1f2937;--brand:#E7B75A;--brand2:rgba(231,183,90,.13);--on-brand:#080B12;--accent:#5B8DEF;--shadow:0 14px 36px rgba(0,0,0,.35);--shadow-hover:0 20px 46px rgba(0,0,0,.5)}
+html[data-font=naskh]{--ur-head:"Noto Naskh Arabic","Noto Sans Arabic",serif}
+html[data-size=s]{--ts:.92}html[data-size=l]{--ts:1.15}
+body{font-family:var(--ur-body);background:radial-gradient(ellipse at 85% -5%,color-mix(in srgb,var(--brand) 9%,transparent),transparent 40%),var(--bg)}
+body.dark .topbar{background:color-mix(in srgb,#080B12 86%,transparent)}
+.hero h1,.news-card h3,.detail-dialog h2,.section-head h2{font-family:var(--ur-head);font-weight:600;letter-spacing:0}
+.hero h1{line-height:1.95;font-size:calc(clamp(27px,5vw,42px)*var(--ts))}
+.news-card h3{line-height:2.15;font-size:calc(clamp(17px,2vw,20px)*var(--ts))}
+.detail-dialog h2{line-height:2.2;font-size:calc(24px*var(--ts))}
+.section-head h2{line-height:2}
+.excerpt{font-size:calc(14px*var(--ts));line-height:2.1}.detail-dialog p{font-size:calc(16px*var(--ts));line-height:2.2}
+html[lang=en] .hero h1,html[lang=en] .news-card h3,html[lang=en] .detail-dialog h2,html[lang=en] .section-head h2{font-family:Inter,system-ui,sans-serif;font-weight:800;line-height:1.4}
+html[lang=en] .news-card h3{line-height:1.5}
+.brand-mark{background:linear-gradient(135deg,#F3CE85,#E7B75A 55%,#b98524);color:#080B12;box-shadow:0 8px 20px rgba(231,183,90,.28)}
+.brand-mark svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:4.5;stroke-linecap:round;stroke-linejoin:round;overflow:visible}
+.brand{font-weight:800;letter-spacing:.06em}
+.brand small{font-family:"Noto Nastaliq Urdu",var(--ur-body);letter-spacing:0;line-height:1.9;font-size:11px}
+.hero{background:linear-gradient(120deg,#080B12 0%,#0f1a30 55%,#16294d 100%);border-color:rgba(231,183,90,.22)}
+.hero:before{border-color:rgba(231,183,90,.2);box-shadow:0 0 0 34px rgba(231,183,90,.03),0 0 0 70px rgba(91,141,239,.025)}
+.hero .eyebrow{color:#E7B75A;border-color:rgba(231,183,90,.3)}
+.hero p{color:#c3cbd8}.meta{color:#aab4c4}
+.tab-btn.active{background:linear-gradient(125deg,#F0C77A,#E7B75A 60%,#c99227);color:#080B12;box-shadow:0 8px 20px rgba(231,183,90,.25)}
+body:not(.dark) .tab-btn.active{background:var(--brand);color:#fff}
+.tag,.count,.read,.save:hover{color:var(--brand)}
+.read:hover{background:var(--brand);color:var(--on-brand)}
+.save.on{background:var(--brand2);color:var(--brand)}
+.detail-sources a{color:var(--brand)}
+.detail-dialog::backdrop{background:rgba(3,5,9,.7);backdrop-filter:blur(4px)}
+.set-body{display:grid;gap:14px;margin-top:14px}.set-body label{display:grid;gap:6px;font-weight:600;font-size:14px}
+.set-body select{padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--ink);font:15px var(--ur-body)}
+/* cinematic intro */
+#intro{position:fixed;inset:0;z-index:100;display:grid;place-content:center;justify-items:center;gap:16px;background:#080B12;color:#F5F6FA;overflow:hidden;--k:1;transition:opacity .55s ease,transform .55s ease}
+#intro.out{opacity:0;transform:scale(1.07);pointer-events:none}
+#intro .beam{position:absolute;inset:-25%;background:conic-gradient(from 200deg at 50% 45%,transparent 0 42%,rgba(231,183,90,.2) 50%,transparent 58%);filter:blur(22px);animation:beam calc(2.5s*var(--k)) ease-out both}
+#intro .sym{position:relative;width:92px;height:92px;fill:none;stroke:#E7B75A;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;overflow:visible;filter:drop-shadow(0 0 14px rgba(231,183,90,.45))}
+#intro .sym path{stroke-dasharray:1;stroke-dashoffset:1;animation:draw calc(1s*var(--k)) ease forwards}
+#intro .sym path:nth-child(2){animation-delay:calc(.15s*var(--k))}#intro .sym path:nth-child(3){animation-delay:calc(.3s*var(--k))}#intro .sym path:nth-child(4){animation-delay:calc(.5s*var(--k))}
+#intro .word{position:relative;font:800 clamp(34px,11vw,56px)/1.2 Inter,system-ui,sans-serif;letter-spacing:.26em;margin-inline-start:.26em;direction:ltr;background:linear-gradient(100deg,#F5F6FA 0 42%,#E7B75A 50%,#F5F6FA 58% 100%) 120% 0/250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;animation:wordIn calc(.8s*var(--k)) ease calc(.6s*var(--k)) forwards,sweep calc(1.1s*var(--k)) ease calc(1.25s*var(--k)) forwards}
+#intro .slogan{position:relative;font:400 clamp(16px,4.6vw,22px)/2.4 "Noto Nastaliq Urdu","Noto Naskh Arabic",serif;color:#9AA4B2;padding:4px 12px;opacity:0;animation:fadeUp calc(.7s*var(--k)) ease calc(1.5s*var(--k)) forwards}
+@keyframes beam{from{opacity:0;transform:rotate(-28deg)}40%{opacity:1}to{opacity:.5;transform:rotate(12deg)}}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes wordIn{from{opacity:0;transform:translateY(12px);letter-spacing:.5em}to{opacity:1;transform:none;letter-spacing:.26em}}
+@keyframes sweep{from{background-position:120% 0}to{background-position:-20% 0}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){#intro{display:none!important}}
