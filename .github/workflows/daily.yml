@@ -17,10 +17,10 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: python -u fetch_news.py
-      - name: Save results
+      - name: Save results and archive
         run: |
           git config user.name "news-bot"
           git config user.email "news-bot@users.noreply.github.com"
-          git add docs/news.json
-          git commit -m "Update news" || echo "nothing to commit"
+          git add docs/news.json docs/archive/
+          git commit -m "Update daily news and archive" || echo "nothing to commit"
           git push
