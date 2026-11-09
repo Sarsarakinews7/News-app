@@ -62,7 +62,29 @@ document.body.append(dlg);
 const msgs=$("aiMsgs"),inp=$("aiQ"),send=$("aiSend");
 let story=null,hist=[],busy=false;
 const CH_STORY=["اس خبر کی اصطلاحات سمجھائیں","اس کی وجوہات کیا ہیں؟","اس کا پس منظر بتائیں","آگے کیا ہو سکتا ہے؟"];
+
 const CH_GEN=["آج دنیا کی سب سے بڑی خبر کیا ہے؟","پاکستان کی تازہ صورتحال بتائیں"];
+// Local caching and conservative per-device daily limits to reduce Gemini usage.
+function cacheHash(value){let h=2166136261;for(let i=0;i<value.length;i++){h^=value.charCodeAt(i);h=Math.imul(h,16777619)}return (h>>>0).toString(36)}
+function cacheRead(key,maxAge){try{const x=JSON.parse(localStorage.getItem(key)||"null");return x&&Date.now()-x.at<maxAge?x.data:null}catch(_){return null}}
+function cacheWrite(key,data){try{localStorage.setItem(key,JSON.stringify({at:Date.now(),data}))}catch(_){}}
+function usageKey(){const d=new Date();return "newsift-ai-usage-"+d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate()}
+function usedToday(){try{return JSON.parse(localStorage.getItem(usageKey())||'{"full":0,"chat":0}')}catch(_){return {full:0,chat:0}}}
+function canCallAI(kind,limit){return (Number(usedToday()[kind])||0)<limit}
+function markAICall(kind){const u=usedToday();u[kind]=(Number(u[kind])||0)+1;try{localStorage.setItem(usageKey(),JSON.stringify(u))}catch(_){}}
+function showFullStory(panel,button,data){
+  panel.innerHTML="";
+  const heading=document.createElement("h2");heading.textContent="مکمل تفصیلی خبر";panel.append(heading);
+  const article=document.createElement("div");article.className="generated-story-text";article.textContent=data.answer;panel.append(article);
+  const valid=(data.sources||[]).filter(s=>s&&/^https:\/\//i.test(s.uri||"")).slice(0,10);
+  if(valid.length){const section=document.createElement("div");section.className="generated-story-sources";
+    const label=document.createElement("h3");label.textContent="استعمال شدہ ذرائع اور مزید مطالعہ";section.append(label);
+    valid.forEach(s=>{const a=document.createElement("a");a.href=s.uri;a.target="_blank";a.rel="noopener noreferrer";a.textContent=s.title||"اصل خبر پڑھیں";section.append(a)});
+    panel.append(section);
+  }
+  button.disabled=false;button.textContent="✓ مکمل خبر تیار ہے";
+}
+
 function bubble(cls,text){const d=document.createElement("div");d.className="ai-b "+cls;d.textContent=text;msgs.append(d);msgs.scrollTop=msgs.scrollHeight;return d}
 function chips(){const c=$("aiChips");c.innerHTML="";(story?CH_STORY:CH_GEN).forEach(t=>{const b=document.createElement("button");b.textContent=t;b.onclick=()=>ask(t);c.append(b)})}
 function openAI(s){
@@ -76,20 +98,29 @@ async function ask(q){
   q=(q||"").trim();if(!q||busy)return;
   bubble("u",q);inp.value="";inp.style.height="auto";
   if(!AI){bubble("a","دانا ابھی فعال نہیں ہوا۔ ایپ کے مالک کو اس کی ترتیب مکمل کرنی ہے۔");return}
+  const chatKey="newsift-chat-v1-"+cacheHash((story?.title||"general")+"|"+q);
+  const cached=cacheRead(chatKey,24*60*60*1000);
+  if(cached){const b=bubble("a",cached.answer);const src=(cached.sources||[]).filter(s=>s&&/^https:\/\//i.test(s.uri||"")).slice(0,6);
+    if(src.length){const box=document.createElement("div");box.className="ai-src";const h=document.createElement("b");h.textContent="ذرائع (محفوظ جواب)";box.append(h);src.forEach(s=>{const a=document.createElement("a");a.href=s.uri;a.target="_blank";a.rel="noopener noreferrer";a.textContent=s.title||"source";box.append(a)});b.append(box)}
+    hist.push({role:"user",text:q},{role:"model",text:cached.answer});return;
+  }
+  if(!canCallAI("chat",8)){bubble("a","آج اس ڈیوائس پر دانا کے سوالات کی محفوظ روزانہ حد پوری ہو گئی ہے۔ محفوظ جوابات دستیاب رہیں گے؛ نئی درخواست کل دوبارہ بھیج سکیں گے۔");return}
   busy=true;send.disabled=true;
   const w=document.createElement("div");w.className="ai-b a ai-dots";w.innerHTML="<span></span><span></span><span></span>";msgs.append(w);msgs.scrollTop=msgs.scrollHeight;
   const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),60000);
   try{
+    markAICall("chat");
     const r=await fetch(AI,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},signal:ac.signal,body:JSON.stringify({question:q,story:story,history:hist.slice(-6)})});
     const d=await r.json().catch(()=>({}));
     w.remove();
-    if(!r.ok||!d.answer)throw new Error(d.error||"fail");
+    if(!r.ok||!d.answer)throw new Error(d.details||d.error||"fail");
+    cacheWrite(chatKey,{answer:d.answer,sources:d.sources||[]});
     const b=bubble("a",d.answer);
     const src=(d.sources||[]).filter(s=>s&&/^https:\/\//i.test(s.uri||"")).slice(0,6);
     if(src.length){const box=document.createElement("div");box.className="ai-src";const h=document.createElement("b");h.textContent="ذرائع";box.append(h);
       src.forEach(s=>{const a=document.createElement("a");a.href=s.uri;a.target="_blank";a.rel="noopener noreferrer";a.textContent=s.title||"source";box.append(a)});b.append(box)}
     hist.push({role:"user",text:q},{role:"model",text:d.answer});
-  }catch(e){w.remove();bubble("a","معذرت، ابھی جواب نہیں مل سکا۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔")}
+  }catch(e){w.remove();bubble("a","معذرت، ابھی جواب نہیں مل سکا۔ "+(e.message||"تھوڑی دیر بعد دوبارہ کوشش کریں۔"))}
   clearTimeout(tm);busy=false;send.disabled=false;msgs.scrollTop=msgs.scrollHeight;
 }
 send.onclick=()=>ask(inp.value);
@@ -121,30 +152,29 @@ async function generateFullStory(button){
   const title=body.querySelector("h2")?.textContent||"";
   const summary=(body.querySelector("p")?.textContent||"").slice(0,3000);
   const sources=[...body.querySelectorAll(".detail-sources a")].map(a=>({name:a.textContent.replace(/↗/g,"").trim(),url:a.href}));
-  button.disabled=true;button.textContent="مکمل خبر تیار ہو رہی ہے…";
+  const storyKey="newsift-fullstory-v1-"+cacheHash(title+"|"+summary);
+  const cached=cacheRead(storyKey,7*24*60*60*1000);
   const panel=document.createElement("section");panel.className="generated-story";panel.dir="rtl";
-  panel.innerHTML='<h2>مکمل تفصیلی خبر</h2><p class="story-loading">معتبر ذرائع سے تازہ معلومات جمع کی جا رہی ہیں۔ اس میں کچھ وقت لگ سکتا ہے…</p>';
   button.after(panel);
+  if(cached){showFullStory(panel,button,cached);return}
+  if(!canCallAI("full",3)){
+    panel.textContent="آج اس ڈیوائس پر مکمل نئی خبروں کی محفوظ حد (3) پوری ہو گئی ہے۔ پہلے سے محفوظ خبریں کھولی جا سکتی ہیں؛ نئی خبر کل دوبارہ تیار کریں۔";
+    button.disabled=false;button.textContent="کل دوبارہ کوشش کریں";return;
+  }
+  button.disabled=true;button.textContent="مکمل خبر تیار ہو رہی ہے…";
+  panel.innerHTML='<h2>مکمل تفصیلی خبر</h2><p class="story-loading">معتبر ذرائع سے تازہ معلومات جمع کی جا رہی ہیں۔ اس میں کچھ وقت لگ سکتا ہے…</p>';
   let timer;
   try{
     const controller=new AbortController();timer=setTimeout(()=>controller.abort(),90000);
+    markAICall("full");
     const response=await fetch(AI,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},signal:controller.signal,
       body:JSON.stringify({mode:"full_story",question:"اس موضوع پر متعدد معتبر اور آزاد ذرائع سے تحقیق کرکے مکمل، تفصیلی اور متوازن اردو نیوز اسٹوری لکھیں۔",story:{title,summary,sources}})});
     const raw=await response.text();
     let data={};
     try{data=JSON.parse(raw)}catch(_){throw new Error("سرور نے JSON کے بجائے غیر متوقع جواب دیا (HTTP "+response.status+")")}
     if(!response.ok||!data.answer)throw new Error(data.details||data.error||("HTTP "+response.status+": جواب خالی ہے"));
-    panel.innerHTML="";
-    const heading=document.createElement("h2");heading.textContent="مکمل تفصیلی خبر";panel.append(heading);
-    const article=document.createElement("div");article.className="generated-story-text";article.textContent=data.answer;panel.append(article);
-    const valid=(data.sources||[]).filter(s=>s&&/^https:\/\//i.test(s.uri||"")).slice(0,10);
-    if(valid.length){
-      const section=document.createElement("div");section.className="generated-story-sources";
-      const label=document.createElement("h3");label.textContent="استعمال شدہ ذرائع اور مزید مطالعہ";section.append(label);
-      valid.forEach(s=>{const a=document.createElement("a");a.href=s.uri;a.target="_blank";a.rel="noopener noreferrer";a.textContent=s.title||"اصل خبر پڑھیں";section.append(a)});
-      panel.append(section);
-    }
-    button.textContent="✓ مکمل خبر تیار ہے";
+    cacheWrite(storyKey,{answer:data.answer,sources:data.sources||[]});
+    showFullStory(panel,button,{answer:data.answer,sources:data.sources||[]});
   }catch(e){
     panel.dataset.failed="true";
     const p=document.createElement("p");p.textContent="خرابی کی تفصیل: "+(e.name==="AbortError"?"درخواست 90 سیکنڈ میں مکمل نہیں ہوئی (Timeout)":(e.message||String(e)));panel.replaceChildren(p);
