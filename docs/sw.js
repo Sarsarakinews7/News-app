@@ -1,1 +1,8 @@
-const CACHE="newsift-shell-v7",FILES=["./","./index.html","./styles.css?v=4","./premium.css?v=5","./app.js","./premium.js?v=5","./extras.js?v=8","./ai-config.js?v=6","./manifest.json","./icon.svg"];self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(FILES))));self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(a=>Promise.all(a.filter(k=>k!==CACHE).map(k=>caches.delete(k))))));self.addEventListener("fetch",e=>{const u=new URL(e.request.url);if(e.request.method!=="GET"||u.origin!==location.origin)return;if(u.pathname.endsWith("/news.json")){e.respondWith(fetch(e.request).then(r=>{const cp=r.clone();caches.open(CACHE).then(c=>c.put(e.request,cp));return r}).catch(()=>caches.match(e.request)));return}e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request)))})
+const CACHE="newsift-shell-v9";
+self.addEventListener("install",e=>{self.skipWaiting()});
+self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(a=>Promise.all(a.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener("fetch",e=>{
+  const u=new URL(e.request.url);
+  if(e.request.method!=="GET"||u.origin!==location.origin)return;
+  e.respondWith(fetch(e.request).then(r=>{const cp=r.clone();caches.open(CACHE).then(c=>c.put(e.request,cp));return r}).catch(()=>caches.match(e.request)));
+});
