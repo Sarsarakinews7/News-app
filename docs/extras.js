@@ -114,7 +114,9 @@ if(body)new MutationObserver(()=>{
   }
 }).observe(body,{childList:true});
 async function generateFullStory(button){
-  if(body.querySelector(".generated-story"))return;
+  const previous=body.querySelector(".generated-story");
+  if(previous&&!previous.dataset.failed)return;
+  if(previous)previous.remove();
   if(!AI){button.textContent="AI سروس ابھی ترتیب نہیں دی گئی";return}
   const title=body.querySelector("h2")?.textContent||"";
   const summary=(body.querySelector("p")?.textContent||"").slice(0,3000);
@@ -123,13 +125,15 @@ async function generateFullStory(button){
   const panel=document.createElement("section");panel.className="generated-story";panel.dir="rtl";
   panel.innerHTML='<h2>مکمل تفصیلی خبر</h2><p class="story-loading">معتبر ذرائع سے تازہ معلومات جمع کی جا رہی ہیں۔ اس میں کچھ وقت لگ سکتا ہے…</p>';
   button.after(panel);
+  let timer;
   try{
-    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),90000);
+    const controller=new AbortController();timer=setTimeout(()=>controller.abort(),90000);
     const response=await fetch(AI,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},signal:controller.signal,
       body:JSON.stringify({mode:"full_story",question:"اس موضوع پر متعدد معتبر اور آزاد ذرائع سے تحقیق کرکے مکمل، تفصیلی اور متوازن اردو نیوز اسٹوری لکھیں۔",story:{title,summary,sources}})});
-    clearTimeout(timer);
-    const data=await response.json().catch(()=>({}));
-    if(!response.ok||!data.answer)throw new Error(data.error||"story generation failed");
+    const raw=await response.text();
+    let data={};
+    try{data=JSON.parse(raw)}catch(_){throw new Error("سرور نے JSON کے بجائے غیر متوقع جواب دیا (HTTP "+response.status+")")}
+    if(!response.ok||!data.answer)throw new Error(data.details||data.error||("HTTP "+response.status+": جواب خالی ہے"));
     panel.innerHTML="";
     const heading=document.createElement("h2");heading.textContent="مکمل تفصیلی خبر";panel.append(heading);
     const article=document.createElement("div");article.className="generated-story-text";article.textContent=data.answer;panel.append(article);
@@ -142,8 +146,9 @@ async function generateFullStory(button){
     }
     button.textContent="✓ مکمل خبر تیار ہے";
   }catch(e){
-    panel.innerHTML="";const p=document.createElement("p");p.textContent="معذرت، اس وقت مکمل خبر تیار نہیں ہو سکی۔ براہِ کرم دوبارہ کوشش کریں۔";panel.append(p);
+    panel.dataset.failed="true";
+    const p=document.createElement("p");p.textContent="خرابی کی تفصیل: "+(e.name==="AbortError"?"درخواست 90 سیکنڈ میں مکمل نہیں ہوئی (Timeout)":(e.message||String(e)));panel.replaceChildren(p);
     button.disabled=false;button.textContent="دوبارہ مکمل خبر تیار کریں";
-  }
+  }finally{if(timer)clearTimeout(timer)}
 }
 })();
