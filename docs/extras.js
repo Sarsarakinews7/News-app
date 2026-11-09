@@ -109,11 +109,11 @@ async function ask(q){
   const w=document.createElement("div");w.className="ai-b a ai-dots";w.innerHTML="<span></span><span></span><span></span>";msgs.append(w);msgs.scrollTop=msgs.scrollHeight;
   const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),60000);
   try{
-    markAICall("chat");
     const r=await fetch(AI,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},signal:ac.signal,body:JSON.stringify({question:q,story:story,history:hist.slice(-6)})});
     const d=await r.json().catch(()=>({}));
     w.remove();
     if(!r.ok||!d.answer)throw new Error(d.details||d.error||"fail");
+    markAICall("chat");
     cacheWrite(chatKey,{answer:d.answer,sources:d.sources||[]});
     const b=bubble("a",d.answer);
     const src=(d.sources||[]).filter(s=>s&&/^https:\/\//i.test(s.uri||"")).slice(0,6);
@@ -166,13 +166,13 @@ async function generateFullStory(button){
   let timer;
   try{
     const controller=new AbortController();timer=setTimeout(()=>controller.abort(),90000);
-    markAICall("full");
     const response=await fetch(AI,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},signal:controller.signal,
       body:JSON.stringify({mode:"full_story",question:"اس موضوع پر متعدد معتبر اور آزاد ذرائع سے تحقیق کرکے مکمل، تفصیلی اور متوازن اردو نیوز اسٹوری لکھیں۔",story:{title,summary,sources}})});
     const raw=await response.text();
     let data={};
     try{data=JSON.parse(raw)}catch(_){throw new Error("سرور نے JSON کے بجائے غیر متوقع جواب دیا (HTTP "+response.status+")")}
     if(!response.ok||!data.answer)throw new Error(data.details||data.error||("HTTP "+response.status+": جواب خالی ہے"));
+    markAICall("full");
     cacheWrite(storyKey,{answer:data.answer,sources:data.sources||[]});
     showFullStory(panel,button,{answer:data.answer,sources:data.sources||[]});
   }catch(e){
