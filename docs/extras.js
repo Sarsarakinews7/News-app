@@ -80,7 +80,7 @@ async function ask(q){
   const w=document.createElement("div");w.className="ai-b a ai-dots";w.innerHTML="<span></span><span></span><span></span>";msgs.append(w);msgs.scrollTop=msgs.scrollHeight;
   const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),60000);
   try{
-    const r=await fetch(AI,{method:"POST",headers:{"Content-Type":"application/json"},signal:ac.signal,body:JSON.stringify({question:q,story:story,history:hist.slice(-6)})});
+    const r=await fetch(AI,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},signal:ac.signal,body:JSON.stringify({question:q,story:story,history:hist.slice(-6)})});
     const d=await r.json().catch(()=>({}));
     w.remove();
     if(!r.ok||!d.answer)throw new Error(d.error||"fail");
@@ -125,7 +125,7 @@ async function generateFullStory(button){
   button.after(panel);
   try{
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),90000);
-    const response=await fetch(AI,{method:"POST",headers:{"Content-Type":"application/json"},signal:controller.signal,
+    const response=await fetch(AI,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},signal:controller.signal,
       body:JSON.stringify({mode:"full_story",question:"اس موضوع پر متعدد معتبر اور آزاد ذرائع سے تحقیق کرکے مکمل، تفصیلی اور متوازن اردو نیوز اسٹوری لکھیں۔",story:{title,summary,sources}})});
     clearTimeout(timer);
     const data=await response.json().catch(()=>({}));
